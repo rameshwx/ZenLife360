@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "872486912364",
+    "project_id": "mediclife-2377d",
+    "storage_bucket": "mediclife-2377d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:872486912364:android:bbdcecd885483610fc3349",
+        "android_client_info": {
+          "package_name": "com.rameshwx.zenlife"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "872486912364-q354s0kf3rsmtpnfv2u28vbueafqb0rm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rameshwx.zenlife",
+            "certificate_hash": "6e41e2c891b0500f647c6dfff40e9024460a5862"
+          }
+        },
+        {
+          "client_id": "872486912364-5ucokoptq0r2b9ot703pjvu00qie016e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBf4j6cIX3QNMo272R2VyW9pvmqIl1sFjk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "872486912364-5ucokoptq0r2b9ot703pjvu00qie016e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
