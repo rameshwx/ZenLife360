@@ -75,8 +75,7 @@ class _JournalPageState extends State<JournalPage> {
       ),
     ).then((didUpdate) {
       if (didUpdate == true) {
-        // Reload your entries if the user saves changes
-        // This could be reloading a list or updating the UI accordingly
+        _loadJournalEntries();
       }
     });
   }

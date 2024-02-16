@@ -1,6 +1,7 @@
 // File: journal_entries_db_helper.dart
 
 import 'dart:async';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as path;
 import 'package:zenlife/database/journal_entry_model.dart'; // Ensure this model class is defined
@@ -84,18 +85,22 @@ class JournalEntriesDbHelper {
     return await db.delete(tableName, where: '$entryIdColumn = ?', whereArgs: [id]);
   }
 
-  static Future<JournalEntry?> getEntryByDate(String date) async {
+  Future<JournalEntry?> getEntryByDate(DateTime date) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      tableName,
-      where: '$dateColumn = ? AND $deleteFlagColumn = 0',
-      whereArgs: [date],
+    String dateString = DateFormat('yyyy-MM-dd').format(date); // Format date to string
+
+    List<Map> maps = await db.query(
+      'JournalEntries',
+      where: 'date = ?',
+      whereArgs: [dateString],
     );
+
     if (maps.isNotEmpty) {
-      return JournalEntry.fromMap(maps.first);
+      return JournalEntry.fromMap(maps.first as Map<String, dynamic>);
     }
     return null;
   }
+
 
 
 

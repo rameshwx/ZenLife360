@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:zenlife/database/journal_entry_model.dart';
-
 import '../../database/dbhelper/journal_entries_db_helper.dart';
 
 class SingleJournalPage extends StatefulWidget {
@@ -16,12 +14,14 @@ class SingleJournalPage extends StatefulWidget {
 }
 
 class _SingleJournalPageState extends State<SingleJournalPage> {
-  late TextEditingController _contentController = TextEditingController();
+  late TextEditingController _contentController;
+  late JournalEntriesDbHelper _dbHelper;
 
   @override
   void initState() {
     super.initState();
     _contentController = TextEditingController(text: widget.journalEntry?.content ?? '');
+    _dbHelper = JournalEntriesDbHelper();
   }
 
   @override
@@ -38,12 +38,23 @@ class _SingleJournalPageState extends State<SingleJournalPage> {
       return;
     }
 
-    final date = widget.journalEntry?.date ?? DateFormat('yyyy-MM-dd').format(DateTime.now());
+    // Use the current date for new entries or keep the existing entry's date
+    final currentDate = DateTime.now();
+    final dateString = DateFormat('yyyy-MM-dd').format(currentDate);
+
+    // Check if an entry already exists for today (for new entries)
+    if (widget.journalEntry == null) {
+      final existingEntry = await _dbHelper.getEntryByDate(currentDate);
+      if (existingEntry != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("An entry already exists for today.")));
+        return;
+      }
+    }
 
     JournalEntry entry = JournalEntry(
       entryId: widget.journalEntry?.entryId,
       userId: userId,
-      date: date,
+      date: dateString, // Ensure this is a DateTime object
       content: _contentController.text,
       deleteFlag: false,
       uploadFlag: widget.journalEntry?.uploadFlag ?? false,
@@ -71,7 +82,7 @@ class _SingleJournalPageState extends State<SingleJournalPage> {
         child: Column(
           children: [
             Text(
-              "Date: ${widget.journalEntry?.date ?? DateFormat('yyyy-MM-dd').format(DateTime.now())}",
+        "Date: ${widget.journalEntry?.date ?? DateFormat('yyyy-MM-dd').format(DateTime.now())}",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
