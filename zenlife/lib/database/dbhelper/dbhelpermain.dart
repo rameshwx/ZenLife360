@@ -22,6 +22,8 @@ class DatabaseHelper {
   }
 
   Future _onCreate(Database db, int version) async {
+
+
     await db.execute('''
     CREATE TABLE Prescriptions (
       prescription_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,7 +60,19 @@ class DatabaseHelper {
   ''');
 
     await db.execute(
-        'CREATE TABLE food_categories (id INTEGER PRIMARY KEY, name TEXT, calories_per_100g INTEGER, calories_per_cup INTEGER, image TEXT)');
+        'CREATE TABLE food_categories ('
+            'id INTEGER PRIMARY KEY, name TEXT, '
+            'calories_per_100g INTEGER, '
+            'calories_per_cup INTEGER, image TEXT)');
+
+    await db.execute('''
+    CREATE TABLE prescription (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER,
+      name TEXT,
+      img TEXT
+    )
+  ''');
 
     await db.execute('''
     CREATE TABLE UserMealEntries (

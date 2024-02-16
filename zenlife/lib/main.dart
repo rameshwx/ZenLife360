@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:zenlife/ui/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:zenlife/firebase_options.dart';
+import 'package:zenlife/ui/splash_screen.dart';
 import 'database/dbhelper/dbhelpermain.dart';
 import 'theme/app_theme.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'ZenLife360',
       theme: AppTheme.lightTheme,
-      home: const GoogleSignInUI(),
+      home: const SplashScreen(),
     );
   }
 }

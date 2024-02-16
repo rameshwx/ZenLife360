@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zenlife/ui/meal_plan/food_categories_page.dart';
+import 'package:zenlife/ui/prescriptions/prescription_list_page.dart';
 
 import 'articles/article_page.dart';
 import 'bmi/bmi_page.dart';
 import 'journal/journal_list_page.dart';
 import 'meal_plan/user_meal_entries_page.dart';
+import 'medications/medication_home_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -61,6 +63,10 @@ class _HomePageState extends State<HomePage> {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => FoodCategoriesPage()));
           }else if (title == 'Journal') {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => JournalPage()));
+          }else if (title == 'Prescriptions') {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => PrescriptionList()));
+          }else if (title == 'Medications') {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => MedicationHomePage()));
           } else {
             // Handle other tiles' onTap events here
             print('$title tapped!');
