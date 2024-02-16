@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:zenlife/ui/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:zenlife/firebase_options.dart';
+import 'database/dbhelper/dbhelpermain.dart';
 import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
-  runApp(const MyApp());
+  await DatabaseHelper.instance.database;
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(const MyApp());
+  });
+
 }
 
 class MyApp extends StatelessWidget {

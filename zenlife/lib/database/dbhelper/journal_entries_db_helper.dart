@@ -48,8 +48,23 @@ class JournalEntriesDbHelper {
 
   static Future<int> insertJournalEntry(JournalEntry entry) async {
     final db = await database;
-    return await db.insert(tableName, entry.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    return await db.insert('JournalEntries', entry.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
+
+  static Future<int> updateJournalEntry(JournalEntry entry) async {
+    final db = await database;
+    return await db.update(
+      'JournalEntries',
+      entry.toMap(),
+      where: 'entry_id = ?',
+      whereArgs: [entry.entryId],
+    );
+  }
+
+  // static Future<int> insertJournalEntry(JournalEntry entry) async {
+  //   final db = await database;
+  //   return await db.insert(tableName, entry.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+  // }
 
   static Future<List<JournalEntry>> getAllJournalEntries() async {
     final db = await database;
@@ -59,13 +74,29 @@ class JournalEntriesDbHelper {
     });
   }
 
-  static Future<int> updateJournalEntry(JournalEntry entry) async {
-    final db = await database;
-    return await db.update(tableName, entry.toMap(), where: '$entryIdColumn = ?', whereArgs: [entry.entryId]);
-  }
+  // static Future<int> updateJournalEntry(JournalEntry entry) async {
+  //   final db = await database;
+  //   return await db.update(tableName, entry.toMap(), where: '$entryIdColumn = ?', whereArgs: [entry.entryId]);
+  // }
 
   static Future<int> deleteJournalEntry(int id) async {
     final db = await database;
     return await db.delete(tableName, where: '$entryIdColumn = ?', whereArgs: [id]);
   }
+
+  static Future<JournalEntry?> getEntryByDate(String date) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableName,
+      where: '$dateColumn = ? AND $deleteFlagColumn = 0',
+      whereArgs: [date],
+    );
+    if (maps.isNotEmpty) {
+      return JournalEntry.fromMap(maps.first);
+    }
+    return null;
+  }
+
+
+
 }

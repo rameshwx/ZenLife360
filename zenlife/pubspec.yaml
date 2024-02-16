@@ -44,6 +44,8 @@ dependencies:
   shared_preferences: ^2.0.6
   sqflite: ^2.0.0+4
   path_provider: ^2.0.6
+  connectivity_plus: ^2.0.2
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -68,9 +70,31 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/condimentsandspreads.jpg
+    - assets/readymadedishes.jpg
+    - assets/processedmeats.jpg
+    - assets/breakfastcereals.jpg
+    - assets/sugarydrinks.jpg
+    - assets/snacks.jpg
+    - assets/butter.jpg
+    - assets/yogurt.jpg
+    - assets/cheese.jpg
+    - assets/milk.jpg
+    - assets/eggs.jpg
+    - assets/seafood.jpg
+    - assets/poultry.jpg
+    - assets/whitemeat.jpg
+    - assets/redmeat.jpg
+    - assets/nutritionalyeast.jpg
+    - assets/tempeh.jpg
+    - assets/tofu.jpg
+    - assets/plantbasedmilks.jpg
+    - assets/nutsandseeds.jpg
+    - assets/grains.jpg
+    - assets/leafygreens.jpg
+    - assets/vegetables.jpg
+    - assets/fruits.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

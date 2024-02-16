@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zenlife/ui/meal_plan/food_categories_page.dart';
+
+import 'articles/article_page.dart';
+import 'bmi/bmi_page.dart';
+import 'journal/journal_list_page.dart';
+import 'meal_plan/user_meal_entries_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   _loadUserName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      userName = prefs.getString('name') ?? 'User'; // Default to 'User' if name not found
+      userName = prefs.getString('name') ?? ''; // Default to 'User' if name not found
     });
   }
 
@@ -26,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome, $userName'),
+        title: Text('Welcome $userName'),
       ),
       body: GridView.count(
         crossAxisCount: 2, // Creates a grid with 2 columns
@@ -47,8 +53,18 @@ class _HomePageState extends State<HomePage> {
       margin: EdgeInsets.all(8),
       child: InkWell(
         onTap: () {
-          // Implement navigation to respective pages
-          print('$title tapped!');
+          if (title == 'Articles') {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticlePage()));
+          }else if (title == 'BMI') {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => BMIPage()));
+          }else if (title == 'Meal Plan') {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => FoodCategoriesPage()));
+          }else if (title == 'Journal') {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => JournalPage()));
+          } else {
+            // Handle other tiles' onTap events here
+            print('$title tapped!');
+          }
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

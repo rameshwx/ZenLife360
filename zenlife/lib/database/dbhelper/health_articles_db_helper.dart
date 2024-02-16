@@ -66,4 +66,17 @@ class HealthArticlesDbHelper {
     final db = await database;
     return await db.delete(tableName, where: '$articleIdColumn = ?', whereArgs: [id]);
   }
+
+  Future<HealthArticle?> getArticleById(int id) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableName,
+      where: '$articleIdColumn = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      return HealthArticle.fromMap(maps.first);
+    }
+    return null;
+  }
 }

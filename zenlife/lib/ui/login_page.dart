@@ -5,7 +5,9 @@ import 'package:sign_in_button/sign_in_button.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zenlife/controller/login_view_controller.dart';
 
+import '../utils/utils.dart';
 import 'home_page.dart';
 
 class GoogleSignInUI extends StatefulWidget {
@@ -89,16 +91,6 @@ class _GoogleSignInScreenState extends State<GoogleSignInUI> {
     );
   }
 
-  // Widget _googleSignInButton() {
-  //   return Center(
-  //     child: SignInButton(
-  //       Buttons.google,
-  //       text: "Sign in with Google",
-  //       onPressed: _handleGoogleSignIn,
-  //     ),
-  //   );
-  // }
-
   Widget _userInfo() {
     return Center(
       child: Column(
@@ -136,6 +128,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInUI> {
   void _handleGoogleSignIn() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final FirebaseAuth _auth = FirebaseAuth.instance;
+    final LoginViewController loginController = LoginViewController(); // Create an instance
 
     try {
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
@@ -153,46 +146,13 @@ class _GoogleSignInScreenState extends State<GoogleSignInUI> {
         });
 
         if (user != null) {
-          print("Google Account ID: ${user.uid}"); // This is the unique ID provided by Google
-          // You can now use this UID for your cloud operations
+          // Now using loginController to send data
+          await loginController.sendDataToAPI(context, user.displayName ?? user.email!, user.email!, user.uid);
+          _checkForExistingUserId(); // Assuming you want to check user ID after successful API call
         }
       }
     } catch (error) {
-      print("Failed to sign in with Google: $error");
-    }
-  }
-
-  Future<void> _sendDataToAPI(String name, String email, String googleAccountId) async {
-    final Uri apiUri = Uri.parse('http://127.0.0.1:8000/api/auth/verify');
-    try {
-      final response = await http.post(apiUri, body: {
-        'name': name,
-        'email': email,
-        'google_account_id': googleAccountId,
-      });
-
-      if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-
-        if (responseData['status'] == true) {
-          // Store user_id, email, and token in SharedPreferences
-          final SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setInt('user_id', responseData['user']['user_id']);
-          await prefs.setString('email', responseData['user']['email']);
-          await prefs.setString('token', responseData['token']);
-          _checkForExistingUserId();
-          // Navigate to the next page or update UI as needed
-        } else {
-          // Handle the case where the API response status is not true
-          print('Failed to verify user: ${responseData['message']}');
-        }
-      } else {
-        // Handle HTTP error
-        print('Failed to load data. Server responded with status code: ${response.statusCode}');
-      }
-    } catch (error) {
-      // Handle errors from the API request
-      print('Error sending data to API: $error');
+      Utils.showSnackBar(context,"Failed to sign in with Google: $error");
     }
   }
 
@@ -202,6 +162,8 @@ class _GoogleSignInScreenState extends State<GoogleSignInUI> {
     if (prefs.getInt('user_id') != null) {
       // If exists, redirect to HomePage
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    }else{
+      Utils.showSnackBar(context,"Failed to sign in with Google");
     }
   }
 

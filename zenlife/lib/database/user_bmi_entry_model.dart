@@ -45,7 +45,7 @@ class UserBMIEntry {
       entryDate: DateTime.tryParse(map['entry_date']),
       deleteFlag: map['delete_flag'] == 1,
       uploadFlag: map['upload_flag'] == 1,
-      lastUpdated: DateTime.tryParse(map['last_updated']),
+      // lastUpdated: DateTime.tryParse(map['last_updated']),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as path;
 import 'package:zenlife/database/user_bmi_entry_model.dart'; // Assuming you have this model class defined similarly
@@ -19,6 +20,13 @@ class UserBMIDbHelper {
   static const lastUpdatedColumn = 'last_updated';
 
   static Database? _database;
+
+  static Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    // Implement database upgrade logic here
+    if (oldVersion < 2) {
+      // For example, adding a new table or altering existing ones in version 2
+    }
+  }
 
   static Future<Database> get database async {
     if (_database != null) return _database!;
@@ -45,7 +53,12 @@ class UserBMIDbHelper {
   static Future open() async {
     final rootPath = await getDatabasesPath();
     final dbPath = path.join(rootPath, databaseName);
-    return await openDatabase(dbPath, onCreate: _onCreate, version: databaseVersion);
+    return await openDatabase(
+      dbPath,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+      version: databaseVersion,
+    );
   }
 
   static Future<int> insertBMIEntry(UserBMIEntry entry) async {
@@ -70,4 +83,31 @@ class UserBMIDbHelper {
     final db = await database;
     return await db.delete(tableName, where: '$bmiEntryIdColumn = ?', whereArgs: [id]);
   }
+
+  Future<UserBMIEntry?> getEntryByDate(DateTime date) async {
+    final db = await database;
+    final dateFormat = DateFormat('yyyy-MM-dd'); // Use DateFormat from the intl package
+    final dateString = dateFormat.format(date);
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableName,
+      where: '$entryDateColumn = ? AND $deleteFlagColumn = 0', // Assuming deleteFlag = 0 means not deleted
+      whereArgs: [dateString],
+    );
+    if (maps.isNotEmpty) {
+      return UserBMIEntry.fromMap(maps.first);
+    }
+    return null;
+  }
+
+  static Future<int> markEntryAsDeleted(int entryId) async {
+    final db = await database;
+    return await db.update(
+      'UserBMIEntries',
+      {'delete_flag': 1},
+      where: 'bmi_entry_id = ?',
+      whereArgs: [entryId],
+    );
+  }
+
 }

@@ -40,10 +40,12 @@ class HealthArticle {
       title: map['title'],
       description: map['description'],
       imageFile: map['image_file'],
-      publishedDate: DateTime.tryParse(map['published_date']),
-      lastUpdated: DateTime.tryParse(map['last_updated']),
-      deleteFlag: map['delete_flag'] == 1, // Treat null as false
+      publishedDate: map['published_date'] is String ? DateTime.tryParse(map['published_date']) : null,
+      lastUpdated: map['updated_at'] is String ? DateTime.tryParse(map['updated_at']) : null,
+      deleteFlag: map['delete_flag'] == 1,
     );
   }
+
+
 
 }
